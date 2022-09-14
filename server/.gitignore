@@ -104,3 +104,6 @@ dist
 .tern-port
 
 .env.local
+
+# DB
+src/database/*.sqlite
