@@ -1,31 +1,57 @@
-import {View, Image, FlatList} from "react-native"
+import {Image, FlatList} from "react-native"
+import {useState, useEffect} from "react"
+import {SafeAreaView} from "react-native-safe-area-context"
+import {useNavigation} from "@react-navigation/native"
 
-import {GAMES} from "../../utils/games"
+import {api} from "../../services/api"
 
 import logoImg from "../../assets/logo-nlw-esports.png"
-import {GameCard} from "../../components/GameCard"
+import {Background} from "../../components/Background"
+import {GameCard, Game} from "../../components/GameCard"
 import {Heading} from "../../components/Heading"
 
 import {styles} from "./styles"
 
 export function Home() {
+    const [games, setGames] = useState<Game[]>([])
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        api.get("/games").then((response) => setGames(response.data))
+    }, [])
+
+    const handleOpenGame = ({id, title, bannerUrl}: Game) => {
+        navigation.navigate("game", {
+            id,
+            title,
+            bannerUrl,
+        })
+    }
+
     return (
-        <View style={styles.container}>
-            <Image source={logoImg} style={styles.logo} />
+        <Background>
+            <SafeAreaView style={styles.container}>
+                <Image source={logoImg} style={styles.logo} />
 
-            <Heading
-                title="Encontre seu duo!"
-                subtitle="Selecione o game que deseja jogar..."
-            />
+                <Heading
+                    title="Encontre seu duo!"
+                    subtitle="Selecione o game que deseja jogar..."
+                />
 
-            <FlatList
-                contentContainerStyle={styles.contentList}
-                data={GAMES}
-                keyExtractor={(item) => item.id}
-                renderItem={({item}) => <GameCard data={item} />}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-            />
-        </View>
+                <FlatList
+                    contentContainerStyle={styles.contentList}
+                    data={games}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({item}) => (
+                        <GameCard
+                            data={item}
+                            onPress={() => handleOpenGame(item)}
+                        />
+                    )}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                />
+            </SafeAreaView>
+        </Background>
     )
 }
