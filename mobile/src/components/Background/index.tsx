@@ -1,20 +1,21 @@
-import {ImageBackground} from "react-native"
+import React, { ReactNode } from 'react'
+import { ImageBackground } from 'react-native'
 
-import backgroundGalaxy from "../../assets/background-galaxy.png"
-import {styles} from "./styles"
+import backgroundGalaxy from '../../assets/background-galaxy.png'
+import { styles } from './styles'
 
 interface BackgroundProps {
-    children: React.ReactNode
+  children: ReactNode
 }
 
-export function Background({children}: BackgroundProps) {
-    return (
-        <ImageBackground
-            source={backgroundGalaxy}
-            defaultSource={backgroundGalaxy}
-            style={styles.container}
-        >
-            {children}
-        </ImageBackground>
-    )
+export function Background({ children }: BackgroundProps) {
+  return (
+    <ImageBackground
+      source={backgroundGalaxy}
+      defaultSource={backgroundGalaxy}
+      style={styles.container}
+    >
+      {children}
+    </ImageBackground>
+  )
 }
